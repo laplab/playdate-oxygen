@@ -1,0 +1,5 @@
+name=Hello World
+author=Nikita Lapkov
+description=Test pad for learning PlayDate SDK.
+bundleID=me.laplab.helloworld
+version=0.1
