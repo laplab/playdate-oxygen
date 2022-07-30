@@ -32,7 +32,7 @@ function myGameSetUp()
     local playerImage = gfx.image.new("Images/player")
     assert( playerImage ) -- make sure the image was where we thought
 
-    playerSprite = gfx.sprite.new( playerImage:scaledImage(2) )
+    playerSprite = gfx.sprite.new( playerImage:scaledImage(3) )
     playerSprite:moveTo( 200, 120 ) -- this is where the center of the sprite is placed; (200,120) is the center of the Playdate screen
     playerSprite:add() -- This is critical!
 
