@@ -29,10 +29,10 @@ function myGameSetUp()
     -- The :setCenter() call specifies that the sprite will be anchored at its center.
     -- The :moveTo() call moves our sprite to the center of the display.
 
-    local playerImage = gfx.image.new("Images/playerImage")
+    local playerImage = gfx.image.new("Images/player")
     assert( playerImage ) -- make sure the image was where we thought
 
-    playerSprite = gfx.sprite.new( playerImage )
+    playerSprite = gfx.sprite.new( playerImage:scaledImage(2) )
     playerSprite:moveTo( 200, 120 ) -- this is where the center of the sprite is placed; (200,120) is the center of the Playdate screen
     playerSprite:add() -- This is critical!
 
@@ -42,17 +42,12 @@ function myGameSetUp()
     -- 2) Use a tilemap, assign it to a sprite with sprite:setTilemap(tilemap),
     --       and call :setZIndex() with some low number so the background stays behind
     --       your other sprites.
-
-    -- local backgroundImage = gfx.image.new( "Images/background" )
-    -- assert( backgroundImage )
-
-    -- gfx.sprite.setBackgroundDrawingCallback(
-    --     function( x, y, width, height )
-    --         -- x,y,width,height is the updated area in sprite-local coordinates
-    --         -- The clip rect is already set to this area, so we don't need to set it ourselves
-    --         backgroundImage:draw( 0, 0 )
-    --     end
-    -- )
+    gfx.sprite.setBackgroundDrawingCallback(
+        function( x, y, width, height )
+            gfx.setColor(gfx.kColorBlack)
+            gfx.fillRect(x, y, width, height)
+        end
+    )
 
 end
 
