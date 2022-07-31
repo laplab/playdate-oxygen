@@ -101,7 +101,28 @@ end
 
 init()
 
+local conf = {
+    player_speed = 5
+}
+
 function playdate.update()
+    if playdate.buttonIsPressed( playdate.kButtonLeft ) then
+		player.velocity.x = -conf.player_speed
+		player.sprite:setImageFlip(playdate.graphics.kImageFlippedX)
+	end
+	if playdate.buttonIsPressed( playdate.kButtonRight ) then
+		player.velocity.x = conf.player_speed
+		player.sprite:setImageFlip(playdate.graphics.kImageUnflipped)
+	end
+
+    local goalX = player.sprite.x + player.velocity.x
+
+	local actualX, _ = player.sprite:moveWithCollisions(goalX, player.sprite.y)
+
+    if actualX ~= goalX then
+        player.velocity.x = 0
+    end
+
     gfx.setBackgroundColor(gfx.kColorBlack)
     gfx.sprite.update()
     playdate.timer.updateTimers()
