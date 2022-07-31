@@ -62,6 +62,7 @@ function init()
     LDtk.load("levels/world.ldtk", use_ldtk_precomputed_levels)
 
     if playdate.isSimulator then
+        -- TODO: Use exported Lua level files in the production build.
         LDtk.export_to_lua_files()
     end
 
