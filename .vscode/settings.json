@@ -10,4 +10,7 @@
       "*=",
       "/="
     ],
+    "Lua.diagnostics.globals": [
+      "playdate"
+    ],
 }
