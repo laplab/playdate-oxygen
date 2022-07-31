@@ -48,6 +48,30 @@
                 "message": 4
                 }
             }
+        },
+        {
+            "label": "Build & Run",
+            "type": "shell",
+            "command": "pdc source ${config:playdate.output} && open -a \"/Users/nikita.lapkov/Developer/PlaydateSDK/bin/Playdate Simulator.app\" ${config:playdate.output}",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true,
+                "revealProblems": "onProblem"
+            },
+            "problemMatcher": {
+                "owner": "lua",
+                "pattern": {
+                "regexp": "^(warning|error):\\s+(.*):(\\d+):\\s+(.*)$",
+                "severity": 1,
+                "file": 2,
+                "line": 3,
+                "message": 4
+                }
+            }
         }
     ]
 }

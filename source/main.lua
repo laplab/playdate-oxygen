@@ -6,6 +6,28 @@ import "CoreLibs/timer"
 import "external/ldtk.lua"
 
 local gfx <const> = playdate.graphics
+local geom <const> = playdate.geometry
+
+class('Player').extends()
+
+function Player:init()
+    self.imagetable = gfx.imagetable.new("images/player")
+    self.sprite = gfx.sprite.new(self.imagetable:getImage(1, 1))
+	self.sprite:setCollideRect(0, 0, self.sprite:getSize())
+end
+
+function Player:reset(entity)
+    local sprite = self.sprite
+    sprite:setZIndex(entity.zIndex)
+	sprite:moveTo(entity.position.x, entity.position.y)
+	sprite:setCenter(entity.center.x, entity.center.y)
+    sprite:setImageFlip(gfx.kImageUnflipped)
+    sprite:add()
+
+	self.velocity = geom.vector2D.new(0, 0)
+end
+
+local player = Player()
 
 local game = {}
 
@@ -52,6 +74,14 @@ function setup_level(level_name)
 		end
 
 		::continue::
+	end
+
+    for index, entity in ipairs( LDtk.get_entities( level_name ) ) do
+		if entity.name == "Player" then
+			-- if entity.fields.EntranceDirection == direction then
+				player:reset(entity)
+			-- end
+		end
 	end
 
     playdate.graphics.sprite.setAlwaysRedraw(true)
