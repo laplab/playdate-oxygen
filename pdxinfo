@@ -1,5 +1,5 @@
-name=Hello World
+name=Oxygen
 author=Nikita Lapkov
-description=Test pad for learning PlayDate SDK.
-bundleID=me.laplab.helloworld
+description=The oxygen is scarce in space. Try to survive until you find next pickup!
+bundleID=me.laplab.oxygen
 version=0.1
