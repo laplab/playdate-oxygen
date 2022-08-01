@@ -26,6 +26,7 @@ function Player:init()
 
     self.sprite = gfx.sprite.new()
 	self.sprite:setCollideRect(0, 0, self.active_loop:image():getSize())
+    self.sprite.collisionResponse = gfx.sprite.kCollisionTypeSlide
     self.sprite.update = function(spriteSelf)
         if self.velocity.x == 0 then
             self:switch_loop(self.idle_loop)
@@ -63,6 +64,9 @@ function Player:reset(entity)
 
 	self.velocity = geom.vector2D.new(0, 0)
     self.flip = false
+    self.grounded = false
+
+    self:switch_loop(self.idle_loop)
 end
 
 local player = Player()
@@ -140,8 +144,11 @@ end
 init()
 
 local conf = {
-    player_max_speed = 4, -- m/s
-    player_ground_friction = 50 -- m/s^2
+    player_max_h_speed = 4, -- m/s
+    player_ground_friction = 50, -- m/s^2
+
+    player_max_v_speed = 2, -- m/s
+    player_gravity = 10, -- m/s^2
 }
 
 function approach(current, target, step, dt)
@@ -159,25 +166,46 @@ end
 function playdate.update()
     local dt = 1 / playdate.display.getRefreshRate()
 
-    if not playdate.buttonIsPressed( playdate.kButtonLeft | playdate.kButtonRight ) then
+    -- Horizontal movement
+    if not playdate.buttonIsPressed(playdate.kButtonLeft | playdate.kButtonRight) then
+        -- TODO: Use air friction when jumping
         player.velocity.x = approach(player.velocity.x, 0, conf.player_ground_friction, dt)
     end
 
-    if playdate.buttonIsPressed( playdate.kButtonLeft ) then
-		player.velocity.x = -conf.player_max_speed
+    if playdate.buttonIsPressed(playdate.kButtonLeft) then
+		player.velocity.x = -conf.player_max_h_speed
 		player.flip = true
 	end
-	if playdate.buttonIsPressed( playdate.kButtonRight ) then
-		player.velocity.x = conf.player_max_speed
+	if playdate.buttonIsPressed(playdate.kButtonRight) then
+		player.velocity.x = conf.player_max_h_speed
 		player.flip = false
 	end
 
+    -- Vertical movement
+    player.velocity.y += conf.player_gravity * dt
+    player.velocity.y = math.min(math.max(player.velocity.y, -conf.player_max_v_speed), conf.player_max_v_speed)
+
     local goalX = player.sprite.x + player.velocity.x
+    local goalY = player.sprite.y + player.velocity.y
 
-	local actualX, _ = player.sprite:moveWithCollisions(goalX, player.sprite.y)
+	local actualX, actualY, collisions, length = player.sprite:moveWithCollisions(goalX, goalY)
 
-    if actualX ~= goalX then
-        player.velocity.x = 0
+    player.grounded = false
+    for index, value in ipairs(collisions) do
+        -- Normal vector values:
+        --  (-1, 0) => Wall on the right
+        --  (1, 0)  => Wall on the left
+        --  (0, -1) => Touching floor
+        --  (0, 1)) => Touching ceiling
+
+        if value.normal.x ~= 0 then
+            player.velocity.x = 0
+        end
+
+        if value.normal.y ~= 0 then
+            player.velocity.y = 0
+            player.grounded = value.normal.y < 0
+        end
     end
 
     gfx.setBackgroundColor(gfx.kColorBlack)
