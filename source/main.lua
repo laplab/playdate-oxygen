@@ -11,44 +11,47 @@ local geom <const> = playdate.geometry
 
 class('Player').extends()
 
-local player_idle_loop = gfx.animation.loop.new(
-    500, -- 2 FPS
-    gfx.imagetable.new("images/player-idle"),
-    true
-)
-
-local player_walk_loop = gfx.animation.loop.new(
-    250, -- 4 FPS
-    gfx.imagetable.new("images/player-walk"),
-    true
-)
-
-local player_active_loop = nil
-
-function switch_loop(from, to)
-    from.paused = true
-    from.frame = 1
-    to.paused = false
-
-    player_active_loop = to
-end
-
 function Player:init()
+    self.idle_loop = gfx.animation.loop.new(
+        500, -- 2 FPS
+        gfx.imagetable.new("images/player-idle"),
+        true
+    )
+    self.walk_loop = gfx.animation.loop.new(
+        250, -- 4 FPS
+        gfx.imagetable.new("images/player-walk"),
+        true
+    )
+    self.active_loop = self.idle_loop
+
     self.sprite = gfx.sprite.new()
-	self.sprite:setCollideRect(0, 0, player_idle_loop:image():getSize())
+	self.sprite:setCollideRect(0, 0, self.active_loop:image():getSize())
     self.sprite.update = function(spriteSelf)
         if self.velocity.x == 0 then
-            switch_loop(player_walk_loop, player_idle_loop)
+            self:switch_loop(self.idle_loop)
         else
-            switch_loop(player_idle_loop, player_walk_loop)
+            self:switch_loop(self.walk_loop)
         end
-        spriteSelf:setImage(player_active_loop:image())
+
+        spriteSelf:setImage(self.active_loop:image())
         if self.flip then
             spriteSelf:setImageFlip(gfx.kImageFlippedX)
         else
             spriteSelf:setImageFlip(gfx.kImageUnflipped)
         end
     end
+end
+
+function Player:switch_loop(to)
+    if to == self.active_loop then
+        return
+    end
+
+    self.active_loop.paused = true
+    self.active_loop.frame = 1
+
+    self.active_loop = to
+    self.active_loop.paused = false
 end
 
 function Player:reset(entity)
