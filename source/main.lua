@@ -102,16 +102,35 @@ end
 init()
 
 local conf = {
-    player_speed = 5
+    player_max_speed = 4, -- m/s
+    player_ground_friction = 50 -- m/s^2
 }
 
+function approach(current, target, step, dt)
+    step *= dt
+    assert(step > 0)
+    if current > target then
+        return math.max(current - step, target)
+    elseif current < target then
+        return math.min(current + step, target)
+    else
+        return current
+    end
+end
+
 function playdate.update()
+    local dt = 1 / playdate.display.getRefreshRate()
+
+    if not playdate.buttonIsPressed( playdate.kButtonLeft | playdate.kButtonRight ) then
+        player.velocity.x = approach(player.velocity.x, 0, conf.player_ground_friction, dt)
+    end
+
     if playdate.buttonIsPressed( playdate.kButtonLeft ) then
-		player.velocity.x = -conf.player_speed
+		player.velocity.x = -conf.player_max_speed
 		player.sprite:setImageFlip(playdate.graphics.kImageFlippedX)
 	end
 	if playdate.buttonIsPressed( playdate.kButtonRight ) then
-		player.velocity.x = conf.player_speed
+		player.velocity.x = conf.player_max_speed
 		player.sprite:setImageFlip(playdate.graphics.kImageUnflipped)
 	end
 
@@ -126,4 +145,5 @@ function playdate.update()
     gfx.setBackgroundColor(gfx.kColorBlack)
     gfx.sprite.update()
     playdate.timer.updateTimers()
+    playdate.drawFPS(10, 10)
 end
