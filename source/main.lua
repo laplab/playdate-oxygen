@@ -18,7 +18,7 @@ local player_idle_loop = gfx.animation.loop.new(
 )
 
 local player_walk_loop = gfx.animation.loop.new(
-    125, -- 8 FPS
+    250, -- 4 FPS
     gfx.imagetable.new("images/player-walk"),
     true
 )
