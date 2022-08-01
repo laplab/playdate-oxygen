@@ -1,5 +1,6 @@
 import "CoreLibs/object"
 import "CoreLibs/graphics"
+import "CoreLibs/animation"
 import "CoreLibs/sprites"
 import "CoreLibs/timer"
 
@@ -10,10 +11,44 @@ local geom <const> = playdate.geometry
 
 class('Player').extends()
 
+local player_idle_loop = gfx.animation.loop.new(
+    500, -- 2 FPS
+    gfx.imagetable.new("images/player-idle"),
+    true
+)
+
+local player_walk_loop = gfx.animation.loop.new(
+    125, -- 8 FPS
+    gfx.imagetable.new("images/player-walk"),
+    true
+)
+
+local player_active_loop = nil
+
+function switch_loop(from, to)
+    from.paused = true
+    from.frame = 1
+    to.paused = false
+
+    player_active_loop = to
+end
+
 function Player:init()
-    self.imagetable = gfx.imagetable.new("images/player")
-    self.sprite = gfx.sprite.new(self.imagetable:getImage(1, 1))
-	self.sprite:setCollideRect(0, 0, self.sprite:getSize())
+    self.sprite = gfx.sprite.new()
+	self.sprite:setCollideRect(0, 0, player_idle_loop:image():getSize())
+    self.sprite.update = function(spriteSelf)
+        if self.velocity.x == 0 then
+            switch_loop(player_walk_loop, player_idle_loop)
+        else
+            switch_loop(player_idle_loop, player_walk_loop)
+        end
+        spriteSelf:setImage(player_active_loop:image())
+        if self.flip then
+            spriteSelf:setImageFlip(gfx.kImageFlippedX)
+        else
+            spriteSelf:setImageFlip(gfx.kImageUnflipped)
+        end
+    end
 end
 
 function Player:reset(entity)
@@ -21,10 +56,10 @@ function Player:reset(entity)
     sprite:setZIndex(entity.zIndex)
 	sprite:moveTo(entity.position.x, entity.position.y)
 	sprite:setCenter(entity.center.x, entity.center.y)
-    sprite:setImageFlip(gfx.kImageUnflipped)
     sprite:add()
 
 	self.velocity = geom.vector2D.new(0, 0)
+    self.flip = false
 end
 
 local player = Player()
@@ -127,11 +162,11 @@ function playdate.update()
 
     if playdate.buttonIsPressed( playdate.kButtonLeft ) then
 		player.velocity.x = -conf.player_max_speed
-		player.sprite:setImageFlip(playdate.graphics.kImageFlippedX)
+		player.flip = true
 	end
 	if playdate.buttonIsPressed( playdate.kButtonRight ) then
 		player.velocity.x = conf.player_max_speed
-		player.sprite:setImageFlip(playdate.graphics.kImageUnflipped)
+		player.flip = false
 	end
 
     local goalX = player.sprite.x + player.velocity.x
