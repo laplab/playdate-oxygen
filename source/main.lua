@@ -158,7 +158,7 @@ local conf = {
     gravity = 1000, -- m/s^2
 }
 
-conf.jumpSpeed = math.sqrt(2 * conf.gravity * 64)
+conf.jumpSpeed = math.sqrt(2 * conf.gravity * 96)
 
 function approach(current, target, step, dt)
     step *= dt
