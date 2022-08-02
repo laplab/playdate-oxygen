@@ -22,19 +22,27 @@ function Player:init()
         gfx.imagetable.new("images/player-walk"),
         true
     )
+    self.jump_up_image = gfx.image.new("images/player-jump-up")
     self.active_loop = self.idle_loop
 
     self.sprite = gfx.sprite.new()
 	self.sprite:setCollideRect(0, 0, self.active_loop:image():getSize())
     self.sprite.collisionResponse = gfx.sprite.kCollisionTypeSlide
     self.sprite.update = function(spriteSelf)
-        if self.velocity.x == 0 then
-            self:switch_loop(self.idle_loop)
+        local image = nil
+
+        if self.grounded then
+            if self.velocity.x == 0 then
+                self:switch_loop(self.idle_loop)
+            else
+                self:switch_loop(self.walk_loop)
+            end
+            image = self.active_loop:image()
         else
-            self:switch_loop(self.walk_loop)
+            image = self.jump_up_image
         end
 
-        spriteSelf:setImage(self.active_loop:image())
+        spriteSelf:setImage(image)
         if self.flip then
             spriteSelf:setImageFlip(gfx.kImageFlippedX)
         else
@@ -169,7 +177,6 @@ function playdate.update()
 
     -- Horizontal movement
     if not playdate.buttonIsPressed(playdate.kButtonLeft | playdate.kButtonRight) then
-        -- TODO: Use air friction when jumping
         player.velocity.x = approach(player.velocity.x, 0, conf.player_ground_friction, dt)
     end
 
