@@ -144,12 +144,13 @@ end
 init()
 
 local conf = {
-    player_max_h_speed = 4, -- m/s
-    player_ground_friction = 50, -- m/s^2
+    player_max_h_speed = 150, -- m/s
+    player_ground_friction = 1500, -- m/s^2
 
-    player_max_v_speed = 2, -- m/s
-    player_gravity = 10, -- m/s^2
+    gravity = 1000, -- m/s^2
 }
+
+conf.jumpSpeed = math.sqrt(2 * conf.gravity * 64)
 
 function approach(current, target, step, dt)
     step *= dt
@@ -182,11 +183,22 @@ function playdate.update()
 	end
 
     -- Vertical movement
-    player.velocity.y += conf.player_gravity * dt
-    player.velocity.y = math.min(math.max(player.velocity.y, -conf.player_max_v_speed), conf.player_max_v_speed)
+    -- TODO: It is possible that jump will not be registered if the button was pressed
+    --       on the first frame, when the 'player.grounded == false'
+    if player.grounded and playdate.buttonJustPressed(playdate.kButtonA) then
+        player.velocity.y -= conf.jumpSpeed
+    end
 
-    local goalX = player.sprite.x + player.velocity.x
-    local goalY = player.sprite.y + player.velocity.y
+    local gravityMultiplier = 1
+    if player.velocity.y > 0 then
+        gravityMultiplier = 2
+    end
+
+    player.velocity.y += conf.gravity * gravityMultiplier * dt
+    -- player.velocity.y = math.min(math.max(player.velocity.y, -conf.player_max_v_speed), conf.player_max_v_speed)
+
+    local goalX = player.sprite.x + player.velocity.x * dt
+    local goalY = player.sprite.y + player.velocity.y * dt
 
 	local actualX, actualY, collisions, length = player.sprite:moveWithCollisions(goalX, goalY)
 
@@ -196,7 +208,7 @@ function playdate.update()
         --  (-1, 0) => Wall on the right
         --  (1, 0)  => Wall on the left
         --  (0, -1) => Touching floor
-        --  (0, 1)) => Touching ceiling
+        --  (0, 1)  => Touching ceiling
 
         if value.normal.x ~= 0 then
             player.velocity.x = 0
