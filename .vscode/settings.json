@@ -12,6 +12,7 @@
     ],
     "Lua.diagnostics.globals": [
       "playdate",
-      "Player"
+      "Player",
+      "Exit"
     ],
 }

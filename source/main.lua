@@ -79,6 +79,22 @@ end
 
 local player = Player()
 
+class('Exit').extends()
+
+function Exit:init()
+    self.sprite = gfx.sprite.new(gfx.image.new("images/exit"))
+end
+
+function Exit:reset(entity)
+    local sprite = self.sprite
+    sprite:setZIndex(entity.fields.z_index)
+	sprite:moveTo(entity.position.x, entity.position.y)
+	sprite:setCenter(entity.center.x, entity.center.y)
+    sprite:add()
+end
+
+local exit = Exit()
+
 local game = {}
 
 local layerSprites = {}
@@ -130,6 +146,12 @@ function setup_level(level_name)
 		if entity.name == "Player" then
 			-- if entity.fields.EntranceDirection == direction then
 				player:reset(entity)
+			-- end
+		end
+
+        if entity.name == "Exit" then
+			-- if entity.fields.EntranceDirection == direction then
+				exit:reset(entity)
 			-- end
 		end
 	end
