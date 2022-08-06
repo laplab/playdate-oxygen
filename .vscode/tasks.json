@@ -28,7 +28,7 @@
         {
             "label": "Run in the simulator",
             "type": "shell",
-            "command": "open -a \"/Users/nikita.lapkov/Developer/PlaydateSDK/bin/Playdate Simulator.app\" ${config:playdate.output}",
+            "command": "open -a \"/Users/laplab/Developer/PlaydateSDK/bin/Playdate Simulator.app\" ${config:playdate.output}",
             "presentation": {
                 "echo": true,
                 "reveal": "silent",
@@ -52,7 +52,7 @@
         {
             "label": "Build & Run",
             "type": "shell",
-            "command": "pdc source ${config:playdate.output} && open -a \"/Users/nikita.lapkov/Developer/PlaydateSDK/bin/Playdate Simulator.app\" ${config:playdate.output}",
+            "command": "pdc source ${config:playdate.output} && open -a \"/Users/laplab/Developer/PlaydateSDK/bin/Playdate Simulator.app\" ${config:playdate.output}",
             "presentation": {
                 "echo": true,
                 "reveal": "silent",

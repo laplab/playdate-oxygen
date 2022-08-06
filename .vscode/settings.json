@@ -2,7 +2,7 @@
   "playdate.output": "output.pdx",
 
   "Lua.workspace.library": [
-    "/Users/nikita.lapkov/Developer/PlaydateSDK/CoreLibs"
+    "/Users/laplab/Developer/PlaydateSDK/CoreLibs"
   ],
   "Lua.runtime.nonstandardSymbol": [
       "+=",
