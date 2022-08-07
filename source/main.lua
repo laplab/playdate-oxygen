@@ -168,7 +168,7 @@ function init()
         LDtk.export_to_lua_files()
     end
 
-    setup_level("Level_0")
+    setup_level("Level_1")
 end
 
 init()
@@ -180,7 +180,7 @@ local conf = {
     gravity = 1000, -- m/s^2
 
     oxygen_max = 120,
-    oxygen_usage = 1,
+    oxygen_usage = 5,
 }
 
 conf.jumpSpeed = math.sqrt(2 * conf.gravity * 96)
