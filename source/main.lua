@@ -178,9 +178,49 @@ local conf = {
     player_ground_friction = 1500, -- m/s^2
 
     gravity = 1000, -- m/s^2
+
+    oxygen_max = 120,
+    oxygen_usage = 1,
 }
 
 conf.jumpSpeed = math.sqrt(2 * conf.gravity * 96)
+
+class('Oxygen').extends()
+
+function Oxygen:init()
+    self.value = conf.oxygen_max
+    self.sprite = gfx.sprite.new()
+    -- TODO use actual size
+    self.sprite:setSize(400, 240)
+    self.sprite:setCenter(0, 0)
+    self.sprite:moveTo(0, 0)
+    self.sprite:setZIndex(1000)
+    self.sprite:setIgnoresDrawOffset(true)
+    self.sprite.draw = function(spriteSelf)
+        local x, y = 10, 10
+        local width, height = conf.oxygen_max, 16
+
+        -- Vessel
+        gfx.setColor(gfx.kColorBlack)
+        gfx.fillRect(x, y, width, height)
+
+        -- Filling
+        gfx.setColor(gfx.kColorWhite)
+        gfx.fillRect(x, y, self.value, height)
+
+        -- Border
+        local padding = 3
+        gfx.setColor(gfx.kColorWhite)
+        gfx.drawRect(x - padding, y - padding, width + 2 * padding, height + 2 * padding)
+    end
+    self.sprite:add()
+end
+
+function Oxygen:tick(time_diff)
+    self.value = math.max(self.value - time_diff * conf.oxygen_usage, 0)
+end
+
+local oxygen = Oxygen()
 
 function approach(current, target, step, dt)
     step *= dt
@@ -256,8 +296,12 @@ function playdate.update()
     local camera_y = screen_height * 3 / 4 - player.sprite.y - player_height / 2
     gfx.setDrawOffset(camera_x, camera_y)
 
+    -- Oxygen
+    oxygen:tick(dt)
+
     gfx.setBackgroundColor(gfx.kColorBlack)
     gfx.sprite.update()
+
     playdate.timer.updateTimers()
-    playdate.drawFPS(10, 10)
+    playdate.drawFPS(370, 10)
 end
