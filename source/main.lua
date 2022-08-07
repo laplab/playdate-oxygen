@@ -197,21 +197,21 @@ function Oxygen:init()
     self.sprite:setZIndex(1000)
     self.sprite:setIgnoresDrawOffset(true)
     self.sprite.draw = function(spriteSelf)
+        local padding = 3
         local x, y = 10, 10
         local width, height = conf.oxygen_max, 16
 
         -- Vessel
         gfx.setColor(gfx.kColorBlack)
-        gfx.fillRect(x, y, width, height)
+        gfx.fillRect(x - padding, y - padding, width + 2 * padding, height + 2 * padding)
+
+        -- Border
+        gfx.setColor(gfx.kColorWhite)
+        gfx.drawRect(x - padding, y - padding, width + 2 * padding, height + 2 * padding)
 
         -- Filling
         gfx.setColor(gfx.kColorWhite)
         gfx.fillRect(x, y, self.value, height)
-
-        -- Border
-        local padding = 3
-        gfx.setColor(gfx.kColorWhite)
-        gfx.drawRect(x - padding, y - padding, width + 2 * padding, height + 2 * padding)
     end
     self.sprite:add()
 end
@@ -233,6 +233,9 @@ function approach(current, target, step, dt)
         return current
     end
 end
+
+-- Variable jump
+local jump_timer = nil
 
 function playdate.update()
     local dt = 1 / playdate.display.getRefreshRate()
@@ -256,6 +259,20 @@ function playdate.update()
     --       on the first frame, when the 'player.grounded == false'
     if player.grounded and playdate.buttonJustPressed(playdate.kButtonA) then
         player.velocity.y -= conf.jumpSpeed
+
+        if jump_timer then
+            jump_timer:remove()
+        end
+        jump_timer = playdate.timer.new(500)
+    end
+
+    if jump_timer and jump_timer.timeLeft ~= 0 and not playdate.buttonIsPressed(playdate.kButtonA) then
+        if player.velocity.y < 0 then
+            player.velocity.y /= 2
+        end
+
+        jump_timer:remove()
+        jump_timer = nil
     end
 
     local gravityMultiplier = 1
