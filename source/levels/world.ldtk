@@ -997,6 +997,20 @@
 							"defUid": 3,
 							"px": [224,416],
 							"fieldInstances": [{ "__identifier": "z_index", "__value": 100, "__type": "Int", "__tile": null, "defUid": 33, "realEditorValues": [] }]
+						},
+						{
+							"__identifier": "Exit",
+							"__grid": [8,5],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FF00F1",
+							"iid": "bca6fcd0-02f0-11ed-a29a-05391ffd91ec",
+							"width": 32,
+							"height": 32,
+							"defUid": 31,
+							"px": [256,160],
+							"fieldInstances": [{ "__identifier": "z_index", "__value": -100, "__type": "Int", "__tile": null, "defUid": 32, "realEditorValues": [] }]
 						}
 					]
 				}

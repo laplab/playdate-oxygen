@@ -14,6 +14,10 @@
       "playdate",
       "Player",
       "Exit",
-      "Oxygen"
+      "Oxygen",
+      "World"
+    ],
+    "Lua.diagnostics.disable": [
+      "lowercase-global"
     ],
 }
