@@ -11,6 +11,8 @@ import "physics/camera"
 import "physics/player_movement"
 import "physics/player_collisions"
 
+import "sequences/reactor"
+
 import "balance"
 
 local gfx <const> = playdate.graphics
@@ -20,6 +22,7 @@ local world = World()
 local player = Player()
 local exit = Exit()
 local oxygen = Oxygen()
+local reactor = Reactor()
 
 -- One time init
 function init()
@@ -29,17 +32,21 @@ end
 init()
 
 function playdate.update()
-    local dt = 1 / playdate.display.getRefreshRate()
+    if reactor:get_sequence() then
+        reactor:progress()
+    else
+        local dt = 1 / playdate.display.getRefreshRate()
 
-    -- Update player position
-    update_player_velocity(player, dt)
-    move_player_with_collisions(player, dt)
+        -- Update player position
+        update_player_velocity(player, dt)
+        move_player_with_collisions(player, dt)
+
+        -- Update entities
+        oxygen:tick(dt)
+    end
+
+    -- Update display state
     update_follow_camera(player)
-
-    -- Update entities
-    oxygen:tick(dt)
-
-    -- Update console state
     gfx.setBackgroundColor(gfx.kColorBlack)
     gfx.sprite.update()
     playdate.timer.updateTimers()

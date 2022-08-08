@@ -15,7 +15,8 @@
       "Player",
       "Exit",
       "Oxygen",
-      "World"
+      "World",
+      "Reactor"
     ],
     "Lua.diagnostics.disable": [
       "lowercase-global"
