@@ -2,6 +2,8 @@ import "CoreLibs/object"
 import "CoreLibs/graphics"
 import "CoreLibs/animation"
 
+import "balance"
+
 local gfx <const> = playdate.graphics
 local geom <const> = playdate.geometry
 
@@ -23,7 +25,12 @@ function Player:init()
 
     self.sprite = gfx.sprite.new()
 	self.sprite:setCollideRect(0, 0, self.active_loop:image():getSize())
-    self.sprite.collisionResponse = gfx.sprite.kCollisionTypeSlide
+    self.sprite.collisionResponse = function(spriteSelf, other)
+        if other:getTag() == EXIT_TAG then
+            return gfx.sprite.kCollisionTypeOverlap
+        end
+        return gfx.sprite.kCollisionTypeSlide
+    end
     self.sprite.update = function(spriteSelf)
         local image = nil
 
@@ -69,6 +76,7 @@ function Player:reset(entity)
 	self.velocity = geom.vector2D.new(0, 0)
     self.flip = false
     self.grounded = false
+    self.reached_exit = false
 
     self:switch_loop(self.idle_loop)
 end

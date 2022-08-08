@@ -8,3 +8,5 @@ JUMP_SPEED = math.sqrt(2 * GRAVITY * 96)
 
 OXYGEN_MAX = 120
 OXYGEN_USAGE = 5
+
+EXIT_TAG = 10

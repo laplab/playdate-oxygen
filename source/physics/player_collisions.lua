@@ -18,6 +18,11 @@ function move_player_with_collisions(player, dt)
         --  (0, -1) => Touching floor
         --  (0, 1)  => Touching ceiling
 
+        if value.other:getTag() == EXIT_TAG then
+            player.reached_exit = true
+            goto continue
+        end
+
         if value.normal.x ~= 0 then
             player.velocity.x = 0
         end
@@ -26,5 +31,7 @@ function move_player_with_collisions(player, dt)
             player.velocity.y = 0
             player.grounded = value.normal.y < 0
         end
+
+        ::continue::
     end
 end

@@ -11,8 +11,6 @@ import "physics/camera"
 import "physics/player_movement"
 import "physics/player_collisions"
 
-import "sequences/reactor"
-
 import "balance"
 
 local gfx <const> = playdate.graphics
@@ -21,8 +19,7 @@ local gfx <const> = playdate.graphics
 local world = World()
 local player = Player()
 local exit = Exit()
-local oxygen = Oxygen()
-local reactor = Reactor()
+local oxygen = Oxygen(player)
 
 -- One time init
 function init()
@@ -32,16 +29,14 @@ end
 init()
 
 function playdate.update()
-    if reactor:get_sequence() then
-        reactor:progress()
-    else
-        local dt = 1 / playdate.display.getRefreshRate()
+    local dt = 1 / playdate.display.getRefreshRate()
 
-        -- Update player position
-        update_player_velocity(player, dt)
-        move_player_with_collisions(player, dt)
+    -- Update player position
+    update_player_velocity(player, dt)
+    move_player_with_collisions(player, dt)
 
-        -- Update entities
+    -- Update entities
+    if not player.reached_exit then
         oxygen:tick(dt)
     end
 

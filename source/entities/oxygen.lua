@@ -7,7 +7,7 @@ local gfx <const> = playdate.graphics
 
 class('Oxygen').extends()
 
-function Oxygen:init()
+function Oxygen:init(player)
     self.value = OXYGEN_MAX
     self.sprite = gfx.sprite.new()
     -- TODO use actual size
@@ -31,7 +31,13 @@ function Oxygen:init()
 
         -- Filling
         gfx.setColor(gfx.kColorWhite)
+        if player.reached_exit then
+            gfx.setPattern({0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55})
+        end
         gfx.fillRect(x, y, self.value, height)
+        if player.reached_exit then
+            gfx.setColor(gfx.kColorWhite)
+        end
     end
     self.sprite:add()
 end
