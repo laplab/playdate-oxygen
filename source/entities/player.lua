@@ -77,6 +77,8 @@ function Player:reset(entity)
     self.flip = false
     self.grounded = false
     self.reached_exit = false
+    self.attached_left = false
+    self.attached_right = false
 
     self:switch_loop(self.idle_loop)
 end
