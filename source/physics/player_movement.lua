@@ -7,9 +7,14 @@ local jump_timer = nil
 local wall_jump_timer = nil
 
 function update_player_velocity(player, dt)
-    if (player.attached_left or player.attached_right) and wall_jump_timer then
+    if (player.grounded or player.attached_left or player.attached_right) and wall_jump_timer then
         wall_jump_timer:remove()
         wall_jump_timer = nil
+    end
+
+    if (player.grounded or player.attached_left or player.attached_right) and jump_timer then
+        jump_timer:remove()
+        jump_timer = nil
     end
 
     -- Horizontal movement
