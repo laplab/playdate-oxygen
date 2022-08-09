@@ -24,7 +24,7 @@ function Player:init()
     self.active_loop = self.idle_loop
 
     self.sprite = gfx.sprite.new()
-	self.sprite:setCollideRect(0, 0, self.active_loop:image():getSize())
+	self.sprite:setCollideRect(2, 0, 30, 32)
     self.sprite.collisionResponse = function(spriteSelf, other)
         if other:getTag() == EXIT_TAG then
             return gfx.sprite.kCollisionTypeOverlap
