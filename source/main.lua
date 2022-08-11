@@ -8,8 +8,8 @@ import "entities/exit"
 import "entities/oxygen"
 
 import "physics/camera"
+import "physics/player_velocity"
 import "physics/player_movement"
-import "physics/player_collisions"
 
 import "balance"
 
@@ -33,7 +33,7 @@ function playdate.update()
 
     -- Update player position
     update_player_velocity(player, dt)
-    move_player_with_collisions(player, dt)
+    move_player(player, dt)
 
     -- Update entities
     if not player.reached_exit then
