@@ -23,7 +23,7 @@ local oxygen = Oxygen(player)
 
 -- One time init
 function init()
-    world:load_level("Level_2", player, exit)
+    world:load_level("Level_3", player, exit)
 end
 
 init()

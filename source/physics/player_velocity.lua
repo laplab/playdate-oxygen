@@ -96,6 +96,8 @@ end
 function compute_velocity_vector(player, current_vx, current_vy, dt)
     local vx = compute_horizontal_velocity(player, current_vx, dt)
     local optional_vx, vy = compute_vertical_velocity(player, current_vy, dt)
+    -- TODO: Limit max vertical speed to prevent the player from
+    -- infinite gravity acceleration during long falls
     if optional_vx then
         vx = optional_vx
     end
