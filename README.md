@@ -21,3 +21,15 @@ A fast-paced platformer.
 - [] Dash with B (uses oxygen?)
 - [] Add gameover detection
 - [] Add environment details to levels
+
+## Funding estimate
+
+```python
+development_hours = 55 * 200
+bugfixing_hours = 55 * 100
+artist_hours = 55 * 50
+music_commission = 200
+
+print(development_hours + bugfixing_hours + artist_hours + music_commission)
+# == 19450
+```
