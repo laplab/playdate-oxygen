@@ -33,3 +33,9 @@ music_commission = 200
 print(development_hours + bugfixing_hours + artist_hours + music_commission)
 # == 19450
 ```
+
+## Price estimate
+
+20$ or equivalent. After the most harsh 40% taxes this becomes 12$, which covers development + bugfixing after selling 1375 copies. Selling this many copies is somewhat realistic (but a little bit optimistic as well).
+
+In the most optimistic case where I sell 5k copies (10% of all PlayDate owners buy my game), I make net 43.5k dollarydoos excluding development + bugfixing costs and taxes.
