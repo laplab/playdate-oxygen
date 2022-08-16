@@ -64,14 +64,14 @@ function compute_vertical_velocity(player, current_vy, dt)
 
     -- WALL JUMP
     elseif (player.attached_left or player.attached_right) and playdate.buttonJustPressed(playdate.kButtonA) then
-        local attach_sign = 1
+        local attached_sign = 1
         if player.attached_right then
-            attach_sign = -1
+            attached_sign = -1
         end
 
         wall_jump_cooldown_timer = playdate.timer.new(WALL_JUMP_COOLDOWN_TIME)
 
-        return 3 * attach_sign * PLAYER_MAX_H_SPEED, current_vy - JUMP_SPEED
+        return 3 * attached_sign * PLAYER_MAX_H_SPEED, current_vy - JUMP_SPEED
 
     -- APPLY GRAVITY
     elseif not player.grounded then

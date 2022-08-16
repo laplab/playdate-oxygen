@@ -29,11 +29,11 @@ function handle_player_bumps(player, collisions)
             player.velocity.y = 0
         end
 
-        if collides_left(c) then
+        if playdate.buttonIsPressed(playdate.kButtonLeft) and collides_left(c) then
             player.attached_left = true
         end
 
-        if collides_right(c) then
+        if playdate.buttonIsPressed(playdate.kButtonRight) and collides_right(c) then
             player.attached_right = true
         end
 
@@ -76,7 +76,7 @@ function handle_player_touches(player)
     if touches_bottom then
         player.grounded = true
         player.attached_left = false
-        player.attach_right = false
+        player.attached_right = false
     end
 
     if not touches_left then
