@@ -1,2 +1,5 @@
 output.pdx/
+build/
+Source/pdex.bin
+Source/pdex.dylib
 .DS_Store

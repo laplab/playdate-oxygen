@@ -39,3 +39,16 @@ print(development_hours + bugfixing_hours + artist_hours + music_commission)
 20$ or equivalent. After the most harsh 40% taxes this becomes 12$, which covers development + bugfixing after selling 1375 copies. Selling this many copies is somewhat realistic (but a little bit optimistic as well).
 
 In the most optimistic case where I sell 5k copies (10% of all PlayDate owners buy my game), I make net 43.5k dollarydoos excluding development + bugfixing costs and taxes.
+
+## Build instructions
+
+C part and Lua part are independent. To build the C part run:
+
+```
+mkdir build
+cd build
+cmake ..
+make
+```
+
+After that you can rebuild Lua part with recent changes and the latest C build will be reused.
