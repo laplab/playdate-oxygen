@@ -2,46 +2,25 @@ import "CoreLibs/object"
 import "CoreLibs/graphics"
 import "CoreLibs/timer"
 
-import "entities/world"
-import "entities/player"
-import "entities/exit"
-import "entities/oxygen"
-
-import "physics/camera"
-import "physics/player_velocity"
-import "physics/player_movement"
+import "external/roomy"
+import "scenes/gameplay"
 
 import "balance"
 
 local gfx <const> = playdate.graphics
 
--- Global components
-local world = World()
-local player = Player()
-local exit = Exit()
-local oxygen = Oxygen(player)
+local manager = Manager()
 
--- One time init
 function init()
-    world:load_level("Level_3", player, exit)
+    manager:hook()
+    manager:push(Gameplay())
 end
 
 init()
 
 function playdate.update()
-    local dt = 1 / playdate.display.getRefreshRate()
+    manager:emit('update')
 
-    -- Update player position
-    update_player_velocity(player, dt)
-    move_player(player, dt)
-
-    -- Update entities
-    if not player.reached_exit then
-        oxygen:tick(dt)
-    end
-
-    -- Update display state
-    update_follow_camera(player)
     gfx.setBackgroundColor(gfx.kColorBlack)
     gfx.sprite.update()
     playdate.timer.updateTimers()
