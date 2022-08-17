@@ -14,8 +14,8 @@ local manager = Manager()
 
 function init()
     manager:hook()
-    -- manager:push(Win(106, 120))
-    manager:push(Gameplay(manager))
+    manager:push(Win(106, 120))
+    -- manager:push(Gameplay(manager))
 end
 
 init()

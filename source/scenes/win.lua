@@ -1,6 +1,7 @@
 import "CoreLibs/object"
 import "CoreLibs/graphics"
 import "CoreLibs/timer"
+import "CoreLibs/qrcode"
 
 import "external/roomy"
 
@@ -15,7 +16,7 @@ function Win:init(oxygen_left, oxygen_max)
 end
 
 function Win:enter(previous, ...)
-    background = gfx.sprite.new(gfx.image.new("images/win-background.png"))
+    local background = gfx.sprite.new(gfx.image.new("images/win-background.png"))
     background:setSize(400, 240)
     background:setCenter(0, 0)
     background:moveTo(0, 0)
@@ -40,6 +41,24 @@ function Win:enter(previous, ...)
         gfx.setImageDrawMode(gfx.kDrawModeCopy)
     end
     score:add()
+
+    self.qr_code = gfx.sprite.new()
+    -- TODO use actual size
+    self.qr_code:setSize(128, 128)
+    self.qr_code:setCenter(0, 0)
+    self.qr_code:moveTo(240, 100)
+    self.qr_code:setZIndex(2)
+    self.qr_code:add()
+
+    local url = "https://laplab.me/oxygen/#Nikita-"..tostring(self.oxygen_left).."-secretHash"
+    gfx.generateQRCode(url, 128, function (image, errorMessage)
+        if not image then
+            print("Error generating QR code: "..errorMessage)
+            return
+        end
+
+        self.qr_code:setImage(image)
+    end)
 end
 
 function Win:update()
