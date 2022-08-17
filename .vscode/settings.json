@@ -19,7 +19,8 @@
       "Reactor",
       "Room",
       "Gameplay",
-      "Manager"
+      "Manager",
+      "Win"
     ],
     "Lua.diagnostics.disable": [
       "lowercase-global"

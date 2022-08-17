@@ -20,9 +20,15 @@ function World:init()
 end
 
 function World:destroy()
-    for layer_name in pairs(LDtk.get_layers(self.level_name)) do
+    for layer_name, layer in pairs(LDtk.get_layers(self.level_name)) do
+		if not layer.tiles then
+			goto continue
+		end
+
         self.layers[layer_name]:remove()
         self.layers[layer_name] = nil
+
+		::continue::
     end
 
 	LDtk.release_level(self.level_name)

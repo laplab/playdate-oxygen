@@ -4,6 +4,7 @@ import "CoreLibs/timer"
 
 import "external/roomy"
 import "scenes/gameplay"
+import "scenes/win"
 
 import "balance"
 
@@ -13,7 +14,8 @@ local manager = Manager()
 
 function init()
     manager:hook()
-    manager:push(Gameplay())
+    -- manager:push(Win(106, 120))
+    manager:push(Gameplay(manager))
 end
 
 init()

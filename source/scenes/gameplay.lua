@@ -13,9 +13,16 @@ import "physics/camera"
 import "physics/player_velocity"
 import "physics/player_movement"
 
+import "scenes/win"
+
 import "balance"
 
 class("Gameplay").extends(Room)
+
+function Gameplay:init(manager)
+    Gameplay.super.init(self)
+    self.manager = manager
+end
 
 function Gameplay:enter(previous, ...)
 	self.world = World()
@@ -34,7 +41,10 @@ function Gameplay:update()
     move_player(self.player, dt)
 
     -- Update entities
-    if not self.player.reached_exit then
+    if self.player.reached_exit then
+        self.manager:enter(Win(self.oxygen.value, OXYGEN_MAX))
+        return
+    else
         self.oxygen:tick(dt)
     end
 
@@ -43,5 +53,7 @@ function Gameplay:update()
 end
 
 function Gameplay:leave(next, ...)
+    reset_camera()
 	self.world:destroy()
+    Gameplay.super.leave(self)
 end

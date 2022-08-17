@@ -9,3 +9,7 @@ function update_follow_camera(player)
     local camera_y = screen_height / 2 - player.sprite.y - player_height / 2
     gfx.setDrawOffset(camera_x, camera_y)
 end
+
+function reset_camera()
+    gfx.setDrawOffset(0, 0)
+end
