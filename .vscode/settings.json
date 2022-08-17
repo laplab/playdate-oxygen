@@ -20,7 +20,9 @@
       "Room",
       "Gameplay",
       "Manager",
-      "Win"
+      "Win",
+      "oxygen_sha256",
+      "base64"
     ],
     "Lua.diagnostics.disable": [
       "lowercase-global"

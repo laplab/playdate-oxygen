@@ -4,6 +4,7 @@ import "CoreLibs/timer"
 import "CoreLibs/qrcode"
 
 import "external/roomy"
+import "external/base64"
 
 class("Win").extends(Room)
 
@@ -50,7 +51,17 @@ function Win:enter(previous, ...)
     self.qr_code:setZIndex(2)
     self.qr_code:add()
 
-    local url = "https://laplab.me/oxygen/#Nikita-"..tostring(self.oxygen_left).."-secretHash"
+    -- TODO: Allow user to choose username.
+    local username = "Nikita"
+    local salt1 = "salty"
+    local salt2 = "salster"
+
+    local data = username..'-'..tostring(self.oxygen_left)
+    local signature = oxygen_sha256(salt1..data..salt2)
+    local payload = data..'-'..signature
+    local payload_b64 = base64.encode(payload)
+
+    local url = "https://laplab.me/oxygen/#"..payload_b64
     gfx.generateQRCode(url, 128, function (image, errorMessage)
         if not image then
             print("Error generating QR code: "..errorMessage)

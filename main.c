@@ -3,8 +3,10 @@
 
 #include "pd_api.h"
 
+#include "sha256.h"
+
 static PlaydateAPI* pd = NULL;
-static int image_popcount(lua_State* L);
+static int oxygen_sha256(lua_State* L);
 
 
 #ifdef _WINDLL
@@ -20,42 +22,31 @@ eventHandler(PlaydateAPI* playdate, PDSystemEvent event, uint32_t arg)
 
 		const char* err;
 
-		if ( !pd->lua->addFunction(image_popcount, "playdate.graphics.image.popcount", &err) )
+		if ( !pd->lua->addFunction(oxygen_sha256, "oxygen_sha256", &err) )
 			pd->system->logToConsole("%s:%i: addFunction failed, %s", __FILE__, __LINE__, err);
 	}
 
 	return 0;
 }
 
-static int image_popcount(lua_State* L)
+static int oxygen_sha256(lua_State* L)
 {
-	LCDBitmap* bitmap = pd->lua->getBitmap(1);
+	const char* input = pd->lua->getArgString(1);
 
-	int width;
-	int height;
-	int rowbytes;
-	uint8_t* data;
-	uint8_t* mask;
-	int y;
-	int count = 0;
+	SHA256_CTX ctx;
+	sha256_init(&ctx);
+	sha256_update(&ctx, input, strlen(input));
 
-	pd->graphics->getBitmapData(bitmap, &width, &height, &rowbytes, &mask, &data);
+	BYTE hash[SHA256_BLOCK_SIZE];
+	sha256_final(&ctx, hash);
 
-	for ( y = 0; y < height; ++y )
-	{
-		int x;
-		uint32_t* row = (uint32_t*)&data[rowbytes*y];
-
-		for (x = 0; x < width; x += 32)
-		{
-#if(_WINDLL)
-			count += __popcnt(row[x / 32]);
-#else
-			count += __builtin_popcount(row[x / 32]);
-#endif
-		}
+	char hex[2 * SHA256_BLOCK_SIZE + 1];
+	for (size_t i = 0; i < SHA256_BLOCK_SIZE; i++) {
+		// My C teacher would be proud.
+		sprintf(hex + 2 * i, "%x%x", hash[i] >> 4, hash[i] & 0xF);
 	}
+	hex[2 * SHA256_BLOCK_SIZE] = '\0';
 
-	pd->lua->pushInt(count);
+	pd->lua->pushString(hex);
 	return 1;
 }
