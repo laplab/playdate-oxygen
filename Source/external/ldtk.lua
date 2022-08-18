@@ -35,6 +35,8 @@
 -- in the simulator call LDtk.export_to_lua_files() after a LDtl file is loaded to save the exported lua files in the save folder
 -- copy the LDtk_lua_levels/ next to your .ldtk file in your project directory
 
+import "log"
+
 LDtk = {}
 
 local _ldtk_filepath = nil
@@ -72,7 +74,7 @@ function LDtk.load( ldtk_file, use_lua_levels )
 
 	-- simply load the level from the precomputed lua file
 	if _use_lua_levels then
-		print("LDtk loader will use lua precomputed levels.")
+		logDebug("LDtk loader will use lua precomputed levels.")
 		local data = playdate.file.run( lua_filename )
 
 		_tilesets = data.tilesets
@@ -195,7 +197,7 @@ end
 -- The files will be saved in the aave folder of the game (PlaydateSDK/Disk/Data)
 function LDtk.export_to_lua_files()
 	if _use_lua_levels then
-		print("LDtk, cannot export level in lua. The system had loaded lua files instead of .ldtk")
+		logDebug("LDtk cannot export level in lua. The system had loaded lua files instead of .ldtk")
 		return
 	end
 
@@ -208,7 +210,7 @@ function LDtk.export_to_lua_files()
 		lua_level_files[ level_name ] = _ldtk_lua_folder..filename..".pdz"
 	end
 
-	print("Export LDtk world")
+	logDebug("Export LDtk world")
 	_.export_lua_table( folder.._.get_filename(_ldtk_filepath)..".lua", {
 		tilesets = _tilesets,
 		level_files = lua_level_files,
@@ -219,7 +221,7 @@ function LDtk.export_to_lua_files()
 	})
 
 	for level_name, level_file in pairs(_level_files) do
-		print("Export LDtk level", level_name)
+		logDebug("Export LDtk level ", level_name)
 
 		LDtk.load_level( level_name )
 		_.export_lua_table( folder.._.get_filename(level_file)..".lua", _levels[ level_name ])
@@ -373,7 +375,7 @@ end
 -- the tileset is also freed if no other level is using it
 function LDtk.release_level( level_name )
 	if not _use_external_files then
-		print("LDtk file doesn't use external files. No need to load/release individual levels.")
+		logDebug("LDtk file doesn't use external files. No need to load/release individual levels.")
 		return
 	end
 
@@ -563,7 +565,7 @@ function _.release_tileset_imagetable(path, flipped)
 	end
 
 	if not _imageTables[id] then
-		print("LDtk: We release an image that was not loaded. Strange...")
+		logDebug("LDtk: We release an image that was not loaded. Strange...")
 		return
 	end
 

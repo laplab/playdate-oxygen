@@ -6,6 +6,8 @@ import "CoreLibs/qrcode"
 import "external/roomy"
 import "external/base64"
 
+import "log"
+
 class("Win").extends(Room)
 
 local gfx <const> = playdate.graphics
@@ -57,17 +59,18 @@ function Win:enter(previous, ...)
     local salt2 = "salster"
 
     local data = username..'-'..tostring(self.oxygen_left)
-    local signature = oxygen_sha256(salt1..data..salt2)
+    local signature = string.sub(oxygen_sha256(salt1..data..salt2), 0, 16)
     local payload = data..'-'..signature
     local payload_b64 = base64.encode(payload)
 
     local url = "https://laplab.me/oxygen/#"..payload_b64
+    playdate.resetElapsedTime()
     gfx.generateQRCode(url, 128, function (image, errorMessage)
         if not image then
-            print("Error generating QR code: "..errorMessage)
+            logError("Error generating QR code:", errorMessage)
             return
         end
-
+        logDebug("QR code generated in", playdate.getElapsedTime(), "seconds")
         self.qr_code:setImage(image)
     end)
 end
