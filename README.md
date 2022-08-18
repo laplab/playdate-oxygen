@@ -12,8 +12,8 @@ A fast-paced platformer.
 - [x] Wall jump
 - [ ] Cancel wall attachment with A + Down
 - [ ] Design 3 interesting non-beginner levels
-- [ ] Add QR code generation (or display a pre-generated QR code, does not matter)
-- [ ] Create basic website which reads data from QR code
+- [x] Add QR code generation (or display a pre-generated QR code, does not matter)
+- [x] Create basic website which reads data from QR code
 - [ ] Make presentation for Panic
 
 ## Ideas bucket
