@@ -55,10 +55,12 @@ function Win:enter(previous, ...)
 
     -- TODO: Allow user to choose username.
     local username = "Nikita"
+    -- TODO: Use actual level number.
+    local level = 15
     local salt1 = "salty"
     local salt2 = "salster"
 
-    local data = username..'-'..tostring(self.oxygen_left)
+    local data = username..'-'..tostring(level)..'-'..tostring(self.oxygen_left)
     local signature = string.sub(oxygen_sha256(salt1..data..salt2), 0, 16)
     local payload = data..'-'..signature
     local payload_b64 = base64.encode(payload)
