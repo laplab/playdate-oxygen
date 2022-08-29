@@ -14,7 +14,7 @@ A fast-paced platformer.
 - [ ] Design 3 interesting non-beginner levels
 - [x] Add QR code generation (or display a pre-generated QR code, does not matter)
 - [x] Create basic website which reads data from QR code
-- [ ] Make presentation for Panic
+- [x] Make presentation for Panic
 
 ## Ideas bucket
 
