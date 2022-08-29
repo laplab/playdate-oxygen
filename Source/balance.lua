@@ -1,4 +1,4 @@
-DEBUG = true
+DEBUG = false
 
 PLAYER_MAX_H_SPEED = 150 -- m/s
 PLAYER_GROUND_FRICTION = 1500 -- m/s^2
