@@ -3,3 +3,4 @@ author=Nikita Lapkov
 description=The oxygen is scarce in space. Try to survive until you find next pickup!
 bundleID=me.laplab.oxygen
 version=0.1
+imagePath=images/packaging
