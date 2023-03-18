@@ -30,7 +30,7 @@ function Gameplay:enter(previous, ...)
     self.exit = Exit()
     self.oxygen = Oxygen(self.player)
 
-    self.world:load_level("Level_0", self.player, self.exit)
+    self.world:load_level("Level_1", self.player, self.exit)
 end
 
 function Gameplay:update()
