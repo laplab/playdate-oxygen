@@ -47,7 +47,13 @@ C part and Lua part are independent. To build the C part run:
 ```
 mkdir build
 cd build
+
+# For Simulator
 cmake ..
+
+# For Device
+cmake -DCMAKE_TOOLCHAIN_FILE=/Users/laplab/Developer/PlaydateSDK/C_API/buildsupport/arm.cmake cmake -DCMAKE_BUILD_TYPE=Release ..
+
 make
 ```
 
